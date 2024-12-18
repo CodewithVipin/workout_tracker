@@ -27,18 +27,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
 //create a new exercise
 
-// save workout
   void save() {
-    // get exercise name from text controller
+    // Get exercise name and inputs from text controllers
     String newExerciseName = exerciseNameController.text;
     String weight = weightController.text;
     String reps = repsController.text;
     String sets = setsController.text;
-
-    // add exercise to workoutdata list
+    // Add exercise to workout data list
     Provider.of<WorkoutData>(context, listen: false)
         .addExercise(widget.workoutName, newExerciseName, weight, reps, sets);
-    // pop dialog box
+
+    // Pop dialog box
     Navigator.pop(context);
     clear();
   }
@@ -127,46 +126,36 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<WorkoutData>(
-        builder: (context, value, child) => Scaffold(
-              appBar: AppBar(
-                title: Text(widget.workoutName),
-                centerTitle: true,
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: createNewExercise,
-                child: Icon(Icons.add),
-              ),
-              body: ListView.builder(
-                  itemCount:
-                      value.numberOfExerciseInWorkout(widget.workoutName),
-                  itemBuilder: (context, index) => ExerciseTile(
-                      onCheckBoxChanged: (val) => onCheckBoxChanged(
-                          widget.workoutName,
-                          value
-                              .getrelevantWorkout(widget.workoutName)
-                              .exercises[index]
-                              .name),
-                      exerciseName: value
-                          .getrelevantWorkout(widget.workoutName)
-                          .exercises[index]
-                          .name,
-                      weight: value
-                          .getrelevantWorkout(widget.workoutName)
-                          .exercises[index]
-                          .weight,
-                      reps: value
-                          .getrelevantWorkout(widget.workoutName)
-                          .exercises[index]
-                          .reps,
-                      sets: value
-                          .getrelevantWorkout(widget.workoutName)
-                          .exercises[index]
-                          .sets,
-                      isCompleted: value
-                          .getrelevantWorkout(widget.workoutName)
-                          .exercises[index]
-                          .isComplete)),
-            ));
+    return Consumer<WorkoutData>(builder: (context, value, child) {
+      final filterExerciseList = value
+          .getrelevantWorkout(widget.workoutName)
+          .exercises
+          .where((item) => item.isEmpty == false)
+          .toList();
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.workoutName),
+          centerTitle: true,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: createNewExercise,
+          child: Icon(Icons.add),
+        ),
+        body: ListView.separated(
+            padding: EdgeInsets.all(10),
+            separatorBuilder: (context, index) => SizedBox(
+                  height: 10,
+                ),
+            itemCount: filterExerciseList.length,
+            itemBuilder: (context, index) => ExerciseTile(
+                onCheckBoxChanged: (val) => onCheckBoxChanged(
+                    widget.workoutName, filterExerciseList[index].name),
+                exerciseName: filterExerciseList[index].name,
+                weight: filterExerciseList[index].weight,
+                reps: filterExerciseList[index].reps,
+                sets: filterExerciseList[index].sets,
+                isCompleted: filterExerciseList[index].isComplete)),
+      );
+    });
   }
 }

@@ -25,13 +25,14 @@ class ExerciseTile extends StatelessWidget {
       child: ListTile(
         title: Text(exerciseName),
         subtitle: Row(
+          spacing: 10,
           children: [
             //weight
-            Chip(label: Text("$weight weight")),
+            Flexible(child: Chip(label: Text("$weight weight"))),
             //reps
-            Chip(label: Text("$reps reps")),
-            //sets
-            Chip(label: Text("$sets sets"))
+            Flexible(child: Chip(label: Text("$reps reps"))),
+            // sets
+            Flexible(child: Chip(label: Text("$sets sets")))
           ],
         ),
         trailing: Checkbox(

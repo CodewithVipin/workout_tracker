@@ -10,4 +10,7 @@ class Exercise {
       required this.reps,
       this.isComplete = false,
       required this.sets});
+
+  bool get isEmpty =>
+      name.isEmpty || weight.isEmpty || sets.isEmpty || reps.isEmpty;
 }

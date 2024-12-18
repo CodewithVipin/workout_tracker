@@ -95,6 +95,19 @@ WORKOUT DATA STRUCTURE
     db.saveTODatabase(workoutList);
   }
 
+// delete an exercise from a workout
+  void deleteExercise(String workoutName, String exerciseName) {
+    // Find the relevant workout
+    final workout =
+        workoutList.firstWhere((workout) => workout.name == workoutName);
+
+    // Remove the exercise with the given name
+    workout.exercises.removeWhere((exercise) => exercise.name == exerciseName);
+
+    // Notify listeners about the change
+    notifyListeners();
+  }
+
 // check off the exercise
 
   void checkOffExcercise(String workoutName, String exerciseName) {

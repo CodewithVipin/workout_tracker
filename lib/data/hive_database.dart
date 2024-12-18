@@ -38,6 +38,8 @@ class HiveDatabase {
 
 /*
 
+
+
 check if any exercises have been done
 we will put a 0 or 1 for each yyyymmdd date 
 
